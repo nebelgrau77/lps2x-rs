@@ -13,3 +13,7 @@ repository = "https://github.com/nebelgrau77/lps25hb-rs"
 
 [dependencies]
 embedded-hal  = { version = "0.2" }
+
+[features]
+lps22hb = []
+lps25hb = []
