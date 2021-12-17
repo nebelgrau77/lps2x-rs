@@ -1,0 +1,12 @@
+/target
+Cargo.lock
+notes.md
+.gdb_history
+*.bin
+*.hex
+*.elf
+/examples/**/target
+*.bin
+**/*.bkp
+**/*.rs.bkp
+diff_plan.md
