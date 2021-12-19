@@ -1,0 +1,29 @@
+[package]
+name = "usbtest"
+version = "0.1.0"
+authors = ["nebelgrau77"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+cortex-m = "0.6.2"
+cortex-m-rt = "0.6.12"
+
+panic-halt = "~0.2"
+
+#nrf52840-hal = { version = "0.11", features = ["rt"]}
+nrf52840-hal = { path = "../../../../NRF52/crates/nrf-hal/nrf52840-hal", version = "0.12"}
+
+arrayvec = {version = "0.5.1", default-features = false}
+
+usb-device = "0.2.7"
+usbd-serial = "0.1.0"
+
+nb = "1"
+
+lps2x = { path = "../..", features = ["lps22hb"]}
+
+[dependencies.embedded-hal]
+version = "0.2.3"
+features = ["unproven"]

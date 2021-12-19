@@ -140,10 +140,19 @@ impl<T, E> LPS2X<T>
                 0 => false,
                 _ => true,
             },
+            
+            #[cfg(feature="lps25hb")]
             /// Is FIFO empty?
             fifo_empty: match reg_value & Bitmasks::EMPTY_FIFO {
                 0 => false,
                 _ => true,
+            },
+
+            #[cfg(feature="lps22hb")]
+            /// Is FIFO empty?
+            fifo_empty: match fifo_level_value {
+                0 => true,
+                _ => false,
             },
 
             /// Read FIFO stored data level
