@@ -54,15 +54,15 @@
 // TO DO: REMOVE PUB FROM READ_REGISTER() FUNCTION AFTER THE TESTS 
 // 
 
-
 #![no_std]
 
 #[cfg(not(any(feature = "lps25hb", feature = "lps22hb")))]
 compile_error!("One of the sensor models must be selected using --features");
 
+/*
 #[cfg(all(feature = "lps25hb", feature = "lps22hb"))]
 compile_error!("Only one of the sensor models can be selected");
-
+*/
 
 
 pub mod sensor;
@@ -82,16 +82,17 @@ use interface::Interface;
 /// Sensor's ID
 //const WHOAMI: u8 = 0b10110001; // decimal value 177 (LPS22HB)
 // const WHOAMI: u8 = 0b10111101; // decimal value 189 (LPS25HB)
- 
+#[cfg(feature = "lps22hb")]
 /// The output of the temperature sensor must be divided by 100, see p. 10 of the datasheet.
 const TEMP_SCALE: f32 = 100.0;
 /// The output of the pressure sensor must be divided by 4096, see p. 10 of the datasheet.
 // https://www.st.com/resource/en/technical_note/dm00242307-how-to-interpret-pressure-and-temperature-readings-in-the-lps25hb-pressure-sensor-stmicroelectronics.pdf
 
+#[cfg(feature = "lps25hb")]
 /// The output of the temperature sensor must be divided by 480, see Table 3 of the datasheet.
 const TEMP_SCALE: f32 = 480.0;
 /// An offset value must be added to the result. This is NOT mentioned in the LPS25HB datasheet, but is described in the LPS25H datasheet.
-#[cfg(lps25hb)]
+#[cfg(feature = "lps25hb")]
 const TEMP_OFFSET: f32 = 42.5;
 /// The output of the pressure sensor must be divided by 4096, see Table 3 of the datasheet.
 const PRESS_SCALE: f32 = 4096.0;
@@ -168,25 +169,25 @@ pub enum ODR {
     OneShot = 0b000, // KEEPING THIS AS A NAME
     /// 1 Hz
     _1Hz = 0b001, // same for both sensors
-    #[cfg(feature = "lps25")]
+    #[cfg(feature = "lps25hb")]
     /// 7 Hz
     _7Hz = 0b010,
-    #[cfg(feature = "lps22")]
+    #[cfg(feature = "lps22hb")]
     /// 10 Hz
     _10Hz = 0b010,    
-    #[cfg(feature = "lps25")]
+    #[cfg(feature = "lps25hb")]
     /// 12.5 Hz    
     _12_5Hz = 0b011,
-    #[cfg(feature = "lps25")]
+    #[cfg(feature = "lps25hb")]
     /// 25 Hz
     _25Hz = 0b100,
-    #[cfg(feature = "lps22")]
+    #[cfg(feature = "lps22hb")]
     /// 25 Hz
     _25Hz = 0b011,
-    #[cfg(feature = "lps22")]
+    #[cfg(feature = "lps22hb")]
     /// 50 Hz    
     _50Hz = 0b100,
-    #[cfg(feature = "lps22")]
+    #[cfg(feature = "lps22hb")]
     /// 75 Hz
     _75Hz = 0b101,
 
@@ -224,10 +225,10 @@ pub enum FIFO_MODE {
     Stream_to_FIFO = 0b011,
     /// Bypass-to-stream mode
     Bypass_to_stream = 0b100,
-    #[cfg(feature = "lps22")]
-    /// Dynamic-stream mode
+    #[cfg(feature = "lps22hb")]
+    /// Dynamic-stream mode    
     Dynamic_Stream = 0b110, // LPS22-specific
-    #[cfg(feature = "lps25")]
+    #[cfg(feature = "lps25hb")]
     /// FIFO Mean mode
     FIFO_Mean = 0b110, // LPS25-specific
     /// Bypass-to-FIFO mode
@@ -243,9 +244,9 @@ impl FIFO_MODE {
 
 /// FIFO Mean mode running average sample size. (Refer to Table 23)
 
-#[cfg(feature = "lps25")]
+#[cfg(feature = "lps25hb")]
 #[allow(non_camel_case_types)]
-+#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy)]
 pub enum FIFO_MEAN {
     /// 2-sample moving average
     _2sample = 0b00001,
@@ -259,7 +260,7 @@ pub enum FIFO_MEAN {
     _32sample = 0b11111,
 }
 
-#[cfg(feature = "lps25")]
+#[cfg(feature = "lps25hb")]
 impl FIFO_MEAN {
     pub fn value(self) -> u8 {
         self as u8 // no need to shift, bits 0:4
@@ -370,7 +371,7 @@ impl FIFO_ON {
 
 
 /// Temperature resolution configuration, number of internal average(Refer to Table 18)
-#[cfg(feature = "lps25")]
+#[cfg(feature = "lps25hb")]
 #[allow(non_camel_case_types)]
 #[derive(Debug, Clone, Copy)]
 pub enum TEMP_RES {
@@ -384,7 +385,7 @@ pub enum TEMP_RES {
     _64 = 0b11,
 }
 
-#[cfg(feature = "lps25")]
+#[cfg(feature = "lps25hb")]
 impl TEMP_RES {
     pub fn value(self) -> u8 {
         (self as u8) << 2 // shifted into the right position, can be used directly
@@ -392,7 +393,7 @@ impl TEMP_RES {
 }
 
 /// Pressure resolution configuration, number of internal average(Refer to Table 19)
-#[cfg(feature = "lps25")]
+#[cfg(feature = "lps25hb")]
 #[allow(non_camel_case_types)]
 #[derive(Debug, Clone, Copy)]
 pub enum PRESS_RES {
@@ -406,7 +407,7 @@ pub enum PRESS_RES {
     _512 = 0b11,
 }
 
-#[cfg(feature = "lps25")]
+#[cfg(feature = "lps25hb")]
 impl PRESS_RES {
     pub fn value(self) -> u8 {
         self as u8 // no need to shift

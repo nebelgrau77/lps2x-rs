@@ -1,31 +1,36 @@
-# Rust LPS25HB pressure sensor driver
+# Rust LPS2X pressure sensor driver
 
 ![Maintenance Intention](https://img.shields.io/badge/maintenance-actively--developed-brightgreen.svg)
 
-A platform agnostic Rust driver for the ST Microelectronics LPS22HB and LPS25HB pressure sensors,
-based on the [`embedded-hal`] traits. Merged from two separate drivers, intended to be used with feature for selecting one of the devices.
+A platform agnostic Rust driver for the ST Microelectronics LPS22HB and LPS25HB pressure sensors, based on the [`embedded-hal`] traits. Inspired by and partially based on [another STMicroelectronics driver](https://github.com/lonesometraveler/lsm9ds1).
+  
+For this crate to work, one of the sensors must be selected as a feature, e.g.
+
+```toml
+lps2x = { path = "../..", features = ["lps25hb"]}
+```
+
 
 [`embedded-hal`]: https://github.com/rust-embedded/embedded-hal
 
-Inspired by and partially based on [another STMicroelectronics driver](https://github.com/lonesometraveler/lsm9ds1).
 
 This driver allows you to:
-- check if sensor is reachable
-- read pressure and temperature
+- read pressure and temperature in both one-shot and continuous mode
 - set data rate
+- set pressure offset and threshold
 - configure interrupts generation
 - configure FIFO
 
-
 # UNDER ACTIVE DEVELOPMENT
 
-Basic functions work, see example. Almost all functions added, and should work fine, but many aren't tested yet.
+Basic functions work, see examples. Almost all functions added, and should work fine, but many aren't tested yet.
 
 ## WORK IN PROGRESS:
 
 This library is work in progress. Not all features are implemented yet. Currently only the I2C interface is implemented. Contributions are welcome.
 
 ### TO DO:
+- [ ] complete documentation
 - [ ] add device ID check and power up in the `new()` function
 - [ ] add an example using FIFO and/or interrupt generation
 - [ ] add SPI interface and an example using it
@@ -33,7 +38,7 @@ This library is work in progress. Not all features are implemented yet. Currentl
 
 ## The device
 
-The LPS25HB is an ultra-compact piezoresistive absolute pressure sensor which functions as a digital output barometer. The device comprises a sensing element and an IC interface which communicates through I2C or SPI from the sensing element to the application.
+The LPS22HB and LPS25HB are ultra-compact piezoresistive absolute pressure sensors which function as digital output barometers. The device comprises a sensing element and an IC interface which communicates through I2C or SPI from the sensing element to the application.
 
 Datasheets: 
 - [LPS25HB](https://www.st.com/resource/en/datasheet/lps25hb.pdf)
@@ -52,12 +57,12 @@ then instantiate the device, selecting the correct sensor with features.
 
 Please find additional examples using hardware in this repository: [examples]
 
-[examples]: https://github.com/nebelgrau77/lps25hb-rs/tree/main/examples
+[examples]: https://github.com/nebelgrau77/lps2x-rs/tree/main/examples
 
 ## Support
 
 For questions, issues, feature requests, and other changes, please file an
-[issue in the github project](https://github.com/nebelgrau77/lps25hb-rs/issues).
+[issue in the github project](https://github.com/nebelgrau77/lps2x-rs/issues).
 
 ## License
 
