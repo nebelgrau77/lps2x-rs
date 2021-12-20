@@ -1,7 +1,6 @@
 //! Interface trait
-// for now it's limited to I2C 
-//pub mod spi;
-//pub use self::spi::SpiInterface;
+pub mod spi;
+pub use self::spi::SpiInterface;
 pub mod i2c;
 pub use self::i2c::I2cInterface;
 

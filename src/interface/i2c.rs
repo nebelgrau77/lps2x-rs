@@ -61,8 +61,6 @@ where
         )
     }
 
-    // MUTLIBYTE SHOULD BE ADDED HERE, AND IT COULD BE 0b0000_0000 for LPS22
-
     #[cfg(feature = "lps22hb")]
     fn read(&mut self, addr: u8, buffer: &mut [u8]) -> Result<(), Self::Error> {    
         core::prelude::v1::Ok(
